@@ -1,0 +1,42 @@
+ 
+cat word_count_data.txt | python mapper.py
+cat word_count_data.txt | python mapper.py | sort -k1,1 | python reducer.py
+
+start-dfs.sh
+
+start-yarn.sh
+
+
+https://www.geeksforgeeks.org/hadoop-streaming-using-python-word-count-problem/
+
+hdfs dfs -mkdir /word_count_in_python
+
+Copy word_count_data.txt to this folder in our HDFS with help of copyFromLocal command.
+
+Syntax to copy a file from your local file system to the HDFS is given below:
+
+hdfs dfs -copyFromLocal /path 1 /path 2 .... /path n /destination
+
+hdfs dfs -copyFromLocal /home/dikshant/Documents/word_count_data.txt /word_count_in_python
+
+hdfs dfs -ls /       # list down content of the root directory
+
+hdfs dfs -ls /word_count_in_python    # list down content of /word_count_in_python directory
+
+cd Documents/
+
+chmod 777 mapper.py reducer.py
+
+
+hadoop jar /home/dikshant/Documents/hadoop-streaming-2.7.3.jar \
+
+> -input /word_count_in_python/word_count_data.txt \
+
+> -output /word_count_in_python/output \
+
+> -mapper /home/dikshant/Documents/mapper.py \
+
+> -reducer /home/dikshant/Documents/reducer.py
+
+
+hdfs dfs -cat /word_count_in_python/output/part-00000
